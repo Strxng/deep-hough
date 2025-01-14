@@ -23,6 +23,8 @@ from tensorboardX import SummaryWriter
 from utils import reverse_mapping, edge_align
 from hungarian_matching import caculate_tp_fp_fn
 
+torch.cuda.empty_cache()
+
 parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Training')
 # arguments from command line
 parser.add_argument('--config', default="./config.yml", help="path to config file")
@@ -42,8 +44,6 @@ CONFIGS["OPTIMIZER"]["LR"] = float(CONFIGS["OPTIMIZER"]["LR"])
 
 os.makedirs(CONFIGS["MISC"]["TMP"], exist_ok=True)
 logger = Logger(os.path.join(CONFIGS["MISC"]["TMP"], "log.txt"))
-
-
 
 logger.info(CONFIGS)
 
