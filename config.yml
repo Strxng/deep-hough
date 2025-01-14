@@ -11,8 +11,8 @@ DATA:
   # LABEL_FILE: "data/training/train_1716_100_100.txt"
   # VAL_LABEL_FILE: "data/training/test_1716_100_100.txt"
   # TEST_LABEL_FILE: "data/training/test_1716_100_100.txt"
-  BATCH_SIZE: 10
-  WORKERS: 2
+  BATCH_SIZE: 2
+  WORKERS: 1
 
 OPTIMIZER:
   LR: 2e-4
@@ -31,7 +31,7 @@ MODEL:
   # only support : resnet18, resnet50, resnet101, mobilenetv2, resnext50, res2net50, vgg16
 
 TRAIN:
-  EPOCHS: 30
+  EPOCHS: 5
   PRINT_FREQ: 100
   TEST: False
   SEED: 1997

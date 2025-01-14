@@ -5,3 +5,4 @@ data\training\NKL_resize_100_100
 **/__pycache__/
 data/NKL
 data/training/NKL_resize_100_100
+nkl_model.pth
