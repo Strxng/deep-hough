@@ -51,16 +51,20 @@ std::vector<at::Tensor> line_accum_forward(
 
     CHECK_INPUT(feat);
     CHECK_INPUT(output);
-    float tabSin[numangle], tabCos[numangle];
+    
+    // Usando std::vector em vez de arrays estáticos
+    std::vector<float> tabSin(numangle), tabCos(numangle);
+    
     const int H = feat.size(2);
     const int W = feat.size(3);
-    initTab(tabSin, tabCos, numangle, numrho, H, W);
+    
+    initTab(tabSin.data(), tabCos.data(), numangle, numrho, H, W);
+    
     const int batch_size = feat.size(0);
     const int channels_size = feat.size(1);
     
-    // torch::set_requires_grad(output, true);
-    auto out = line_accum_cuda_forward(feat, tabCos, tabSin, output, numangle, numrho);
-    // std::cout << out[0].sum() << std::endl;
+    auto out = line_accum_cuda_forward(feat, tabCos.data(), tabSin.data(), output, numangle, numrho);
+    
     CHECK_CONTIGUOUS(out[0]);
     return out;
 }
@@ -76,22 +80,20 @@ std::vector<torch::Tensor> line_accum_backward(
     CHECK_INPUT(grad_inputs);
     CHECK_INPUT(feat);
 
-    float tabSin[numangle], tabCos[numangle];
+    // Usando std::vector para os arrays
+    std::vector<float> tabSin(numangle), tabCos(numangle);
+    
     const int H = feat.size(2);
     const int W = feat.size(3);
-    initTab(tabSin, tabCos, numangle, numrho, H, W);
-
-    const int batch_size = feat.size(0);
-    const int channels_size = feat.size(1);
-    const int imH = feat.size(2);
-    const int imW = feat.size(3);
+    
+    initTab(tabSin.data(), tabCos.data(), numangle, numrho, H, W);
 
     return line_accum_cuda_backward(
         grad_outputs,
         grad_inputs,
         feat,
-        tabCos,
-        tabSin,
+        tabCos.data(),
+        tabSin.data(),
         numangle,
         numrho);
 }
