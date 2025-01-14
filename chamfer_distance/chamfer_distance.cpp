@@ -1,7 +1,7 @@
 #include <torch/torch.h>
 
 // CUDA forward declarations
-int ChamferDistanceKernelLauncher(
+void ChamferDistanceKernelLauncher(
     const int b, const int n,
     const float* xyz,
     const int m,
@@ -11,7 +11,7 @@ int ChamferDistanceKernelLauncher(
     float* result2,
     int* result2_i);
 
-int ChamferDistanceGradKernelLauncher(
+void ChamferDistanceGradKernelLauncher(
     const int b, const int n,
     const float* xyz1,
     const int m,
@@ -32,10 +32,10 @@ void chamfer_distance_forward_cuda(
     const at::Tensor idx1, 
     const at::Tensor idx2) 
 {
-    ChamferDistanceKernelLauncher(xyz1.size(0), xyz1.size(1), xyz1.data<float>(),
-                                            xyz2.size(1), xyz2.data<float>(),
-                                            dist1.data<float>(), idx1.data<int>(),
-                                            dist2.data<float>(), idx2.data<int>());
+    ChamferDistanceKernelLauncher(xyz1.size(0), xyz1.size(1), xyz1.data_ptr<float>(),
+                                  xyz2.size(1), xyz2.data_ptr<float>(),
+                                  dist1.data_ptr<float>(), idx1.data_ptr<int>(),
+                                  dist2.data_ptr<float>(), idx2.data_ptr<int>());
 }
 
 void chamfer_distance_backward_cuda(

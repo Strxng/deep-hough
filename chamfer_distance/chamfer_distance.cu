@@ -3,8 +3,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 
-__global__ 
-void ChamferDistanceKernel(
+__global__ void ChamferDistanceKernel(
 	int b,
 	int n,
 	const float* xyz,
@@ -155,8 +154,7 @@ void ChamferDistanceKernelLauncher(
 }
 
 
-__global__ 
-void ChamferDistanceGradKernel(
+__global__ void ChamferDistanceGradKernel(
 	int b, int n,
 	const float* xyz1,
 	int m,
