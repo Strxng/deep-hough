@@ -56,9 +56,9 @@ class VGG_FPN(nn.Module):
         [c2, c3, c4, c5] = self.vgg_feat(x)
         # Top-down
         p5 = self.toplayer(c5)
-        p4 = nn.functional.upsample(p5, size=c4.size()[2:], mode='bilinear') + self.latlayer1(c4)
-        p3 = nn.functional.upsample(p4, size=c3.size()[2:], mode='bilinear') + self.latlayer2(c3)
-        p2 = nn.functional.upsample(p3, size=c2.size()[2:], mode='bilinear') + self.latlayer3(c2)
+        p4 = nn.functional.interpolate(p5, size=c4.size()[2:], mode='bilinear') + self.latlayer1(c4)
+        p3 = nn.functional.interpolate(p4, size=c3.size()[2:], mode='bilinear') + self.latlayer2(c3)
+        p2 = nn.functional.interpolate(p3, size=c2.size()[2:], mode='bilinear') + self.latlayer3(c2)
         
         p4 = self.smooth1(p4)
         p3 = self.smooth2(p3)
