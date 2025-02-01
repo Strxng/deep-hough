@@ -84,12 +84,12 @@ def reverse_mapping(point_list, numAngle, numRho, size=(32, 32)):
         b_points.append((p1[1], p1[0], p2[1], p2[0]))
   return b_points
 
-def visulize_mapping(b_points, size, filename):
-  img = cv2.imread(os.path.join(filename)) #change the path when using other dataset.
-  img = cv2.resize(img, size)
-  for (y1, x1, y2, x2) in b_points:
-    img = cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), thickness=int(0.01*max(size[0], size[1])))
-  return img
+# def visulize_mapping(b_points, size, filename):
+#   img = cv2.imread(os.path.join(filename)) #change the path when using other dataset.
+#   img = cv2.resize(img, size)
+#   for (y1, x1, y2, x2) in b_points:
+#     img = cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), thickness=int(0.01*max(size[0], size[1])))
+#   return img
 
 # Argumentos
 
@@ -137,10 +137,9 @@ with torch.no_grad():
   key_points = model(image_tensor)
   key_points = torch.sigmoid(key_points)
 
-
   # Pós-processamento
-  visualize_save_path = os.path.join(CONFIGS["MISC"]["TMP"], 'visualize_test')
-  os.makedirs(visualize_save_path, exist_ok=True)
+  # visualize_save_path = os.path.join(CONFIGS["MISC"]["TMP"], 'visualize_test')
+  # os.makedirs(visualize_save_path, exist_ok=True)
 
   binary_kmap = key_points.squeeze().cpu().numpy() > CONFIGS['MODEL']['THRESHOLD']
   kmap_label = label(binary_kmap, connectivity=1)
@@ -167,14 +166,12 @@ with torch.no_grad():
     b_points[i] = (y1, x1, y2, x2)
 
   # Visualizar e salvar imagem com as linhas
-  vis = visulize_mapping(b_points, original_size[::-1], args.image)
-  output_image_path = os.path.join(visualize_save_path, os.path.basename(args.image))
-  cv2.imwrite(output_image_path, vis)
+  # vis = visulize_mapping(b_points, original_size[::-1], args.image)
+  # output_image_path = os.path.join(visualize_save_path, os.path.basename(args.image))
+  # cv2.imwrite(output_image_path, vis)
 
-  # Salvar as coordenadas das linhas em .npy
-  np_data = np.array(b_points)
-  output_npy_path = os.path.join(visualize_save_path, os.path.basename(args.image).split('.')[0])
-  np.save(output_npy_path, np_data)
+  output_string = f"{len(b_points)} "
+  output_string += ' '.join(' '.join(map(str, point)) for point in b_points)
+  output_string += '\n'
 
-  print(f"Imagem salva em: {output_image_path}")
-  print(f"Coordenadas salvas em: {output_npy_path}.npy")
+  print(f"{output_string}")
