@@ -12,6 +12,8 @@ from torchvision import transforms
 from model.network import Net
 from skimage.measure import label, regionprops
 
+# Utils
+
 def get_boundary_point(y, x, angle, H, W):
   '''
   Given point y,x with angle, return a two point in image boundary with shape [H, W]
